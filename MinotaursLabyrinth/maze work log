@@ -1,0 +1,36 @@
+maze work log
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TODO
+
+class: metrics_simulations (maze)
+	- def: optimize metrics(weightings, metric_nums, n)
+**	- def: analyze p (p, metric_to_eval, n)
+
+class: minotaurs labyrinth
+	- def: create_game()
+
+TOEDIT
+
+class: painter
+	- def: first_person_view(r, c)
