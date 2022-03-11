@@ -2,13 +2,15 @@ from matrix import Matrix
 
 import random, time, math
 
+# TODO: move scoring metrics to maze factory
+
 # TODO: make matrix private (later so you can test in driver)
 class Maze:
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
+    def __init__(self, rows, cols):
+        self.rows = rows
+        self.cols = cols
 
-        self.matrix = Matrix(width, height)
+        self.matrix = Matrix(rows, cols)
 
     def build_maze(self, p):
         self.matrix.braid(p)
@@ -26,7 +28,7 @@ class Maze:
     def remove_all_squares(self):
         self.matrix.remove_all_squares()
 
-    def get_adjacent(self):
+    def can_I_travel(self, direction_str):
         pass
 
     def get_wall_sparsity_metric(self):
@@ -113,7 +115,6 @@ class Maze:
         if value >= 6500:
             return 1
         return 0
-
 
     def braid(self, p=1.0):
         self.matrix.braid(p)

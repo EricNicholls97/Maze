@@ -1,9 +1,11 @@
 import pygame
+
 cyan = (0, 200, 255)
+black = (0, 0, 0)
 
 
 class Painter:
-    global cyan
+    global cyan, black
 
     def __init__(self, width, height, UI_width):
         self.metrics_written = 1
@@ -55,17 +57,7 @@ class Painter:
 
         pygame.display.update()
 
-    # def get_distance(self):
-    #     ev = pygame.event.get()
-    #     for event in ev:
-    #         if event.type == pygame.MOUSEBUTTONUP:
-    #             last_x, last_y = pygame.mouse.get_pos()
-    #             x, y = pygame.mouse.get_pos()
-    #             if clicks2:
-    #                 print(x)
 
-    # fear: painter shouldn't have access to
-    # TODO (does this change anything?): should use r, c coordinates of every wall
     def draw_maze_lines(self, vert, horz):
         w = self.game_width / (len(vert[0]) + 1)
         h = self.height / (len(horz[0]))
@@ -87,15 +79,19 @@ class Painter:
                 if horz[i][j] == 1:
                     pygame.draw.line(self.screen, cyan, (j*w, i2*h), (j2*w, i2*h))
 
+        # ? : chance
         pygame.display.update()
 
-    # ? : chance
     # _ : _
-    def draw_game(self, player_loc, game_obj_list, maze_width, maze_height):
+    def draw_game(self, player_loc, game_obj_list, player_img_link):
+        # self.screen.fill(black)
+
+        # TODO: I want to call draw_maze_lines here
+
         w = self.maze_width
         h = self.maze_height
 
-        self.__draw_player__(player_loc)
+        self.draw_player(player_loc, player_img_link)
 
         pygame.font.init()
         myfont = pygame.font.SysFont('Comic Sans MS', 25)
@@ -114,29 +110,14 @@ class Painter:
 
             pygame.display.update()
 
-    def __draw_player__(self, player_loc):
+    def draw_player(self, player_loc, img_link):
         w = self.maze_width
         h = self.maze_height
 
-        print("Pixels:", w, h)
+        y_loc = h * (player_loc[0] + 1/10)
+        x_loc = w * (player_loc[1] + 1/10)
 
-        carImg = pygame.image.load('aiden.png')
-
-        y_loc = h * player_loc[0] + 3
-        x_loc = w * player_loc[1]
-
-        self.screen.blit(carImg, (x_loc, y_loc))
-
-        pygame.display.update()
-
-
-
-
-
-
-
-
-
+        self.screen.blit(img_link, (x_loc, y_loc))
 
 
 

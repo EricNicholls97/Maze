@@ -3,6 +3,7 @@ from maze import Maze
 import datetime
 import time
 
+
 def get_eta(sex_elapsed, progress):
     if progress==0:
         return "undefined"
@@ -26,16 +27,18 @@ def score_maze(weights, scores):
 
     return total_score
 
+
+
 # create a maze using a list of Metric objects and corresponding weights.
 # num of trials = n
-def create_maze(n, height, width):
+def create_maze(n, rows, cols):
     t1 = time.time()
 
     best_score = -1
     best_m = None
 
     for i in range(n):
-        m = Maze(height, width)
+        m = Maze(rows, cols)
 
         m.build_maze(1.0)
 
@@ -56,6 +59,6 @@ def create_maze(n, height, width):
         elapsed_sex = int(time.time() - t1)
         progress = (i+1)/n
         eta = get_eta(elapsed_sex, progress)
-        print("i={} \t|  {}% \t|  t= {} m \t|  eta= {}".format(i, round(100*progress, 2), elapsed_sex//60, eta))
+        print("maze # {}  (n={}) \t|  {}% \t|  t= {} m \t|  eta= {}".format(i+1, n, round(100*progress, 2), elapsed_sex//60, eta))
 
     return best_m
