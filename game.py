@@ -7,7 +7,7 @@ import maze_factory
 import datetime, time, random, pygame
 
 class Game:
-    def __init__(self):
+    def __init__(self, width):
         self.rows = 25
         self.cols = 25
         # self.game_arr = [[None] * self.cols for _ in range(self.rows)] # store all objects in game obj list
@@ -17,21 +17,25 @@ class Game:
         self.player1 = self.Player(self.rows - 1, random.randint(0, self.cols - 1))
         self.player_sprite_direc = pygame.image.load('Sprites/purple_pink.png')
 
-        self.painter = Painter(1800, 1100, 800)
+        self.UI_bar_perc = 0.30
+        self.UI_bar = self.UI_bar_perc * width
+        height = width - self.UI_bar
+
+        self.painter = Painter(width, height, self.UI_bar)
 
         self.current_maze = None
         self.num_mazes = 1
 
-
     def new_game(self):
         print("\ncreating maze\n")
 
+        self.painter.clear_screen()
+
         m = maze_factory.create_maze(self.num_mazes, self.rows, self.cols)
-
         self.current_maze = m
-        self.__create_game__(m)
 
-        print("Maze + Game Ready")
+        self.__create_game__(m)
+        print("Ready to play!")
         self.draw_game()
 
         self.game_loop()
@@ -100,11 +104,11 @@ class Game:
     def get_pygame_input(self):
         events = pygame.event.get()
         for event in events:
+            if event.type == pygame.QUIT:
+                quit()
             if event.type == pygame.KEYDOWN:
-                if event.type == pygame.QUIT:
-                    return False
-                if event.type == pygame.K_RETURN:
-                    pass    # TODO:
+                if event.key == pygame.K_RETURN:
+                    self.new_game()
                 if event.key == pygame.K_w:
                     self.__move_player__("up")
                 if event.key == pygame.K_a:
@@ -144,3 +148,10 @@ class Game:
                 self.row -= 1
             if direction_str == "down":
                 self.row += 1
+
+
+def main():
+    g = Game(1000)
+    g.new_game()
+
+main()

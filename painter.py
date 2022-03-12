@@ -45,7 +45,7 @@ class Painter:
 
     def draw_foundation(self):
         # clear screen
-        self.screen.fill((0, 0, 0))
+        self.clear_screen()
 
         # left, bottom, top line (right line is UI line)
         pygame.draw.line(self.screen, cyan, (1, 0), (1, self.height))   # left
@@ -56,7 +56,6 @@ class Painter:
         pygame.draw.line(self.screen, cyan, (self.game_width, 0), (self.game_width, self.height))
 
         pygame.display.update()
-
 
     def draw_maze_lines(self, vert, horz):
         w = self.game_width / (len(vert[0]) + 1)
@@ -84,14 +83,14 @@ class Painter:
 
     # _ : _
     def draw_game(self, player_loc, game_obj_list, player_img_link):
-        # self.screen.fill(black)
-
-        # TODO: I want to call draw_maze_lines here
+        # TODO: I want to call draw_maze_lines here but need arrays.
+        # Then I could clear the screen here
+        # Theres a cleaner way to write this class.
 
         w = self.maze_width
         h = self.maze_height
 
-        self.draw_player(player_loc, player_img_link)
+        self.__draw_player__(player_loc, player_img_link)
 
         pygame.font.init()
         myfont = pygame.font.SysFont('Comic Sans MS', 25)
@@ -108,9 +107,9 @@ class Painter:
                 x_loc = w * (go_col + 2/5)
                 self.screen.blit(textsurface, (x_loc, y_loc))
 
-            pygame.display.update()
+        pygame.display.update()
 
-    def draw_player(self, player_loc, img_link):
+    def __draw_player__(self, player_loc, img_link):
         w = self.maze_width
         h = self.maze_height
 
@@ -118,6 +117,10 @@ class Painter:
         x_loc = w * (player_loc[1] + 1/10)
 
         self.screen.blit(img_link, (x_loc, y_loc))
+
+    def clear_screen(self):
+        self.screen.fill((0, 0, 0))
+        pygame.display.update()
 
 
 
