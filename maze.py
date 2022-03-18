@@ -28,8 +28,9 @@ class Maze:
     def remove_all_squares(self):
         self.matrix.remove_all_squares()
 
-    def can_I_travel(self, direction_str):
-        pass
+    def can_I_travel(self, loc_tup, direction_str):
+        map = {"right": "R", "left": "L", "up": "U", "down": "D"}
+        return self.matrix.can_I_travel(loc_tup[0], loc_tup[1], map[direction_str])
 
     def get_wall_sparsity_metric(self):
         # 3 x 3

@@ -20,6 +20,7 @@ class Painter:
 
         self.border = 20
         self.screen = pygame.display.set_mode((width, height))
+
         self.screen.fill((0, 0, 0))
 
         self.maze_width = None

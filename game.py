@@ -91,14 +91,10 @@ class Game:
     def wait(self, current_time, last_frame_time):
         time.sleep(1)
 
-        # FPS = 60
-        #
-        # sleep_time = 1. / FPS - (current_time - last_frame_time)
-        # if sleep_time > 0:
-        #     time.sleep(sleep_time)
+    def __check_and_move_player__(self, direction_str):
 
-    def __move_player__(self, direction_str):
-        self.player1.move(direction_str)
+        if self.current_maze.can_I_travel(self.player1.get_loc(), direction_str):
+            self.player1.move(direction_str)
         self.draw_game()
 
     def get_pygame_input(self):
@@ -110,13 +106,13 @@ class Game:
                 if event.key == pygame.K_RETURN:
                     self.new_game()
                 if event.key == pygame.K_w:
-                    self.__move_player__("up")
+                    self.__check_and_move_player__("up")
                 if event.key == pygame.K_a:
-                    self.__move_player__("left")
+                    self.__check_and_move_player__("left")
                 if event.key == pygame.K_s:
-                    self.__move_player__("down")
+                    self.__check_and_move_player__("down")
                 if event.key == pygame.K_d:
-                    self.__move_player__("right")
+                    self.__check_and_move_player__("right")
 
                 if event.key == pygame.K_RIGHT:
                     print("Right")
@@ -151,7 +147,7 @@ class Game:
 
 
 def main():
-    g = Game(1000)
+    g = Game(2800)
     g.new_game()
 
 main()
