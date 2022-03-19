@@ -23,8 +23,10 @@ class Painter:
 
         self.screen.fill((0, 0, 0))
 
-        self.maze_width = None
-        self.maze_height = None
+        self.cell_width = None
+        self.cell_height = None
+
+        self.all_groups_list = []
 
     def write_metric(self, name, metric_value, metric_score):
         # UI bar text
@@ -62,8 +64,8 @@ class Painter:
         w = self.game_width / (len(vert[0]) + 1)
         h = self.height / (len(horz[0]))
 
-        self.maze_width = w
-        self.maze_height = h
+        self.cell_width = w
+        self.cell_height = h
 
         for i in range(len(vert)):
             for j in range(len(vert[0])):
@@ -82,46 +84,86 @@ class Painter:
         # ? : chance
         pygame.display.update()
 
-    # _ : _
-    def draw_game(self, player_loc, game_obj_list, player_img_link):
-        # TODO: I want to call draw_maze_lines here but need arrays.
-        # Then I could clear the screen here
-        # Theres a cleaner way to write this class.
+    def add_group(self, obj_list):
+        group = pygame.sprite.Group()
+        w = self.cell_width
+        h = self.cell_height
 
-        w = self.maze_width
-        h = self.maze_height
+        for el in obj_list:
+            el_loc = el.get_loc()
+            x = el_loc[1] * w + (w * 1/5)
+            y = el_loc[0] * h + (h * 1/5)
+            el_img = el.get_img()
+            spr = self.Sprite(x, y, w, h, el_img)
+            group.add(spr)
 
-        self.__draw_player__(player_loc, player_img_link)
+        self.all_groups_list.append(group)
 
-        pygame.font.init()
-        myfont = pygame.font.SysFont('Comic Sans MS', 25)
+    def draw_groups(self):
+        for el in self.all_groups_list:
+            el.draw(self.screen)
+            el.empty()
+        pygame.display.flip()
 
-        for game_obj in game_obj_list:
-            go_row = game_obj[0]
-            go_col = game_obj[1]
-            go_str = game_obj[2]
-
-            textsurface = myfont.render(go_str, False, (255, 255, 255))
-
-            if go_str == "?":
-                y_loc = h * go_row
-                x_loc = w * (go_col + 2/5)
-                self.screen.blit(textsurface, (x_loc, y_loc))
-
-        pygame.display.update()
-
-    def __draw_player__(self, player_loc, img_link):
-        w = self.maze_width
-        h = self.maze_height
-
-        y_loc = h * (player_loc[0] + 1/10)
-        x_loc = w * (player_loc[1] + 1/10)
-
-        self.screen.blit(img_link, (x_loc, y_loc))
 
     def clear_screen(self):
         self.screen.fill((0, 0, 0))
         pygame.display.update()
+
+    class Sprite (pygame.sprite.Sprite):
+        def __init__(self, x, y, wid, hei, sprite_img):
+            super().__init__()
+            self.rect = pygame.Rect(x, y, wid, hei)
+
+            image = pygame.image.load(sprite_img)
+            self.image = pygame.transform.scale(image.convert_alpha(), (wid*2/3, hei*2/3))
+
+
+
+
+
+
+
+
+
+
+
+
+    # def draw_game(self, player_loc, game_obj_list, player_img_link):
+    #     # TODO: I want to call draw_maze_lines here but need arrays.
+    #     # Then I could clear the screen here
+    #     # Theres a cleaner way to write this class.
+    #
+    #     w = self.cell_width
+    #     h = self.cell_height
+    #
+    #     self.__draw_player__(player_loc, player_img_link)
+    #
+    #     pygame.font.init()
+    #     myfont = pygame.font.SysFont('Comic Sans MS', 25)
+    #
+    #     for game_obj in game_obj_list:
+    #         go_row = game_obj[0]
+    #         go_col = game_obj[1]
+    #         go_str = game_obj[2]
+    #
+    #         textsurface = myfont.render(go_str, False, (255, 255, 255))
+    #
+    #         if go_str == "?":
+    #             y_loc = h * go_row
+    #             x_loc = w * (go_col + 2/5)
+    #             self.screen.blit(textsurface, (x_loc, y_loc))
+    #
+    #     pygame.display.update()
+    #
+    # def __draw_player__(self, player_loc, img_link):
+    #     w = self.cell_width
+    #     h = self.cell_height
+    #
+    #     y_loc = h * (player_loc[0] + 1/10)
+    #     x_loc = w * (player_loc[1] + 1/10)
+    #
+    #     self.screen.blit(img_link, (x_loc, y_loc))
 
 
 

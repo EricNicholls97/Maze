@@ -6,6 +6,7 @@ import maze_factory
 
 import datetime, time, random, pygame
 
+
 class Game:
     def __init__(self, width):
         self.rows = 25
@@ -14,8 +15,7 @@ class Game:
 
         self.game_obj_dict = {}
 
-        self.player1 = self.Player(self.rows - 1, random.randint(0, self.cols - 1))
-        self.player_sprite_direc = pygame.image.load('Sprites/purple_pink.png')
+        self.player1 = self.Sprite((self.rows - 1, random.randint(0, self.cols - 1)), 'player')
 
         self.UI_bar_perc = 0.30
         self.UI_bar = self.UI_bar_perc * width
@@ -46,7 +46,14 @@ class Game:
         self.painter.draw_maze_lines(self.current_maze.get_vert_walls(), self.current_maze.get_horz_walls())
 
         # painter draw_game
-        self.painter.draw_game(self.player1.get_loc(), self.__get_array_of_game_obj_dict__(self.game_obj_dict), self.player_sprite_direc)
+        game_obj_list = self.__get_array_of_game_obj_dict__(self.game_obj_dict)
+
+        self.painter.add_group(game_obj_list)
+        self.painter.add_group([self.player1])
+
+        self.painter.draw_groups()
+
+        # self.painter.draw_game(self.player1.get_loc(), self.__get_array_of_game_obj_dict__(self.game_obj_dict), self.player_sprite_direc)
 
     def __create_game__(self, m):
         # add chances
@@ -58,44 +65,27 @@ class Game:
             c = random.randint(0, self.cols - 1)
             if (r, c) in self.game_obj_dict.keys():
                 continue
-            chance = self.Chance()
-            self.game_obj_dict[(r, c)] = chance
+            spr = self.Sprite((r, c), 'chance')
+            self.game_obj_dict[(r, c)] = spr
             i += 1
 
     def __get_array_of_game_obj_dict__(self, obj_dict):
-        a = []      # stores (row, col, symbol)
-        for (r, c) in obj_dict.keys():
-            a.append((r, c, obj_dict[(r, c)].get_symbol()))
-        return a
+        return list(obj_dict.values())
 
-    # how do you continuously update paint
     def game_loop(self):
-        FPS = 60
-        cur_time = time.time()  # use to calculate fps
-
-        keep_running = True
-        while keep_running:
-
-            if not self.get_pygame_input():  # gets pygame input events
-                keep_running = False
-
-            # self.draw_game()
-
-            # last_time = cur_time
-            # cur_time = time.time()
-            # self.wait(cur_time, last_time)
-
+        while self.get_pygame_input():
+            pass
         pass
-        # get user input. move player,
-
-    def wait(self, current_time, last_frame_time):
-        time.sleep(1)
 
     def __check_and_move_player__(self, direction_str):
-
         if self.current_maze.can_I_travel(self.player1.get_loc(), direction_str):
-            self.player1.move(direction_str)
-        self.draw_game()
+            self.__move__(direction_str)
+            self.draw_game()
+
+    def __move__(self, dir_str):
+        dic = {'left': (0, -1), 'right': (0, 1), 'up': (-1, 0), 'down': (1, 0)}
+        loc_off = dic[dir_str]
+        self.player1.move_loc(loc_off[0], loc_off[1])
 
     def get_pygame_input(self):
         events = pygame.event.get()
@@ -114,40 +104,58 @@ class Game:
                 if event.key == pygame.K_d:
                     self.__check_and_move_player__("right")
 
-                if event.key == pygame.K_RIGHT:
-                    print("Right")
-
         return True
 
-    class Chance:
-        def __init__(self):
-            self.seed = random.randint(3, 7)
+    class Sprite:
+        def __init__(self, loc, type):
+            self.row = loc[0]
+            self.col = loc[1]
+            self.type = type
 
-        def get_symbol(self):
-            return "?"
-
-    class Player:
-        def __init__(self, st_row, st_col):
-            self.row = st_row
-            self.col = st_col
+        def get_img(self):
+            if self.type == 'player':
+                return 'Sprites/purple_pink.png'
+            if self.type == 'chance':
+                return 'Sprites/question_mark.png'
 
         def get_loc(self):
             return self.row, self.col
 
-        # direction = 0: left   1: right   2: up   3: down
-        def move(self, direction_str):
-            if direction_str == "left":
-                self.col -= 1
-            if direction_str == "right":
-                self.col += 1
-            if direction_str == "up":
-                self.row -= 1
-            if direction_str == "down":
-                self.row += 1
+        def move_loc(self, r, c):
+            self.row += r
+            self.col += c
+
+
+    # # TODO: maybe replace w/ sprite class
+    # class Chance:
+    #     def __init__(self):
+    #         self.seed = random.randint(3, 7)
+    #
+    #     def get_symbol(self):
+    #         return "?"
+    #
+    # class Player:
+    #     def __init__(self, st_row, st_col):
+    #         self.row = st_row
+    #         self.col = st_col
+    #
+    #     def get_loc(self):
+    #         return self.row, self.col
+    #
+    #     # direction = 0: left   1: right   2: up   3: down
+    #     def move(self, direction_str):
+    #         if direction_str == "left":
+    #             self.col -= 1
+    #         if direction_str == "right":
+    #             self.col += 1
+    #         if direction_str == "up":
+    #             self.row -= 1
+    #         if direction_str == "down":
+    #             self.row += 1
 
 
 def main():
-    g = Game(2800)
+    g = Game(1800)
     g.new_game()
 
 main()
