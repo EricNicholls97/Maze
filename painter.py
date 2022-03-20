@@ -84,7 +84,9 @@ class Painter:
         # ? : chance
         pygame.display.update()
 
-    def add_group_chances(self, obj_list):
+    def add_group_chance(self, obj_list):
+        if self.group_chance is not None:
+            self.group_chance.clear(self.screen, pygame.Surface((self.width, self.height)))
         self.group_chance = pygame.sprite.Group()
         w = self.cell_width
         h = self.cell_height
@@ -110,7 +112,6 @@ class Painter:
         p_img = player.get_img()
         spr = self.Sprite(x, y, w, h, p_img)
         self.group_player.add(spr)
-
 
     def draw_group_chance(self):
         self.group_chance.draw(self.screen)

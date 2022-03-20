@@ -51,7 +51,7 @@ class Game:
         # painter draw_game
         game_obj_list = self.__get_array_of_game_obj_dict__(self.game_obj_dict)
 
-        self.painter.add_group_chances(game_obj_list)
+        self.painter.add_group_chance(game_obj_list)
         self.painter.add_group_player(self.player1)
 
         self.painter.draw_group_chance()
@@ -86,8 +86,8 @@ class Game:
         if self.current_maze.can_I_travel(self.player1.get_loc(), direction_str):
             self.__move__(direction_str)
             self.painter.add_group_player(self.player1)
-            ploc = self.player1.get_loc()
             self.painter.draw_group_player()
+            self.painter.draw_group_chance()
             self.clock.tick(10)
 
     def __move__(self, dir_str):
