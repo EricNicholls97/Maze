@@ -9,6 +9,8 @@ import datetime, time, random, pygame
 
 class Game:
     def __init__(self, width):
+        self.clock = pygame.time.Clock()
+
         self.rows = 25
         self.cols = 25
         # self.game_arr = [[None] * self.cols for _ in range(self.rows)] # store all objects in game obj list
@@ -21,15 +23,16 @@ class Game:
         self.UI_bar = self.UI_bar_perc * width
         height = width - self.UI_bar
 
-        self.painter = Painter(width, height, self.UI_bar)
+        w = width / (self.cols + 1)
+        h = height / self.rows
+
+        self.painter = Painter(width, height, self.UI_bar, self.rows, self.cols)
 
         self.current_maze = None
         self.num_mazes = 1
 
     def new_game(self):
         print("\ncreating maze\n")
-
-        self.painter.clear_screen()
 
         m = maze_factory.create_maze(self.num_mazes, self.rows, self.cols)
         self.current_maze = m
@@ -48,12 +51,12 @@ class Game:
         # painter draw_game
         game_obj_list = self.__get_array_of_game_obj_dict__(self.game_obj_dict)
 
-        self.painter.add_group(game_obj_list)
-        self.painter.add_group([self.player1])
+        self.painter.add_group_chances(game_obj_list)
+        self.painter.add_group_player(self.player1)
 
-        self.painter.draw_groups()
+        self.painter.draw_group_chance()
+        self.painter.draw_group_player()
 
-        # self.painter.draw_game(self.player1.get_loc(), self.__get_array_of_game_obj_dict__(self.game_obj_dict), self.player_sprite_direc)
 
     def __create_game__(self, m):
         # add chances
@@ -73,14 +76,19 @@ class Game:
         return list(obj_dict.values())
 
     def game_loop(self):
-        while self.get_pygame_input():
-            pass
+        while True:
+            if not self.get_pygame_input():
+                break
+
         pass
 
     def __check_and_move_player__(self, direction_str):
         if self.current_maze.can_I_travel(self.player1.get_loc(), direction_str):
             self.__move__(direction_str)
-            self.draw_game()
+            self.painter.add_group_player(self.player1)
+            ploc = self.player1.get_loc()
+            self.painter.draw_group_player()
+            self.clock.tick(10)
 
     def __move__(self, dir_str):
         dic = {'left': (0, -1), 'right': (0, 1), 'up': (-1, 0), 'down': (1, 0)}

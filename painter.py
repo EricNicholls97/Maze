@@ -7,7 +7,7 @@ black = (0, 0, 0)
 class Painter:
     global cyan, black
 
-    def __init__(self, width, height, UI_width):
+    def __init__(self, width, height, UI_width, nrows, ncols):
         self.metrics_written = 1
 
         self.width = width
@@ -20,13 +20,16 @@ class Painter:
 
         self.border = 20
         self.screen = pygame.display.set_mode((width, height))
-
         self.screen.fill((0, 0, 0))
 
-        self.cell_width = None
-        self.cell_height = None
+        self.cell_width = self.game_width / ncols
+        self.cell_height = height / nrows
 
-        self.all_groups_list = []
+        self.surface_player = pygame.Surface((self.cell_width, self.cell_height))
+        self.surface_player.fill((0, 0, 0))
+
+        self.group_chance = None
+        self.group_player = None
 
     def write_metric(self, name, metric_value, metric_score):
         # UI bar text
@@ -48,7 +51,7 @@ class Painter:
 
     def draw_foundation(self):
         # clear screen
-        self.clear_screen()
+        self.screen.fill((0, 0, 0))
 
         # left, bottom, top line (right line is UI line)
         pygame.draw.line(self.screen, cyan, (1, 0), (1, self.height))   # left
@@ -61,11 +64,8 @@ class Painter:
         pygame.display.update()
 
     def draw_maze_lines(self, vert, horz):
-        w = self.game_width / (len(vert[0]) + 1)
-        h = self.height / (len(horz[0]))
-
-        self.cell_width = w
-        self.cell_height = h
+        w = self.cell_width
+        h = self.cell_height
 
         for i in range(len(vert)):
             for j in range(len(vert[0])):
@@ -84,8 +84,8 @@ class Painter:
         # ? : chance
         pygame.display.update()
 
-    def add_group(self, obj_list):
-        group = pygame.sprite.Group()
+    def add_group_chances(self, obj_list):
+        self.group_chance = pygame.sprite.Group()
         w = self.cell_width
         h = self.cell_height
 
@@ -95,20 +95,30 @@ class Painter:
             y = el_loc[0] * h + (h * 1/5)
             el_img = el.get_img()
             spr = self.Sprite(x, y, w, h, el_img)
-            group.add(spr)
+            self.group_chance.add(spr)
 
-        self.all_groups_list.append(group)
+    def add_group_player(self, player):
+        if self.group_player is not None:
+            self.group_player.clear(self.screen, pygame.Surface((self.width, self.height)))     # clear group w/ surface
+        self.group_player = pygame.sprite.Group()
+        w = self.cell_width
+        h = self.cell_height
 
-    def draw_groups(self):
-        for el in self.all_groups_list:
-            el.draw(self.screen)
-            el.empty()
+        ploc = player.get_loc()
+        x = ploc[1] * w + (w * 1 / 5)
+        y = ploc[0] * h + (h * 1 / 5)
+        p_img = player.get_img()
+        spr = self.Sprite(x, y, w, h, p_img)
+        self.group_player.add(spr)
+
+
+    def draw_group_chance(self):
+        self.group_chance.draw(self.screen)
         pygame.display.flip()
 
-
-    def clear_screen(self):
-        self.screen.fill((0, 0, 0))
-        pygame.display.update()
+    def draw_group_player(self):
+        self.group_player.draw(self.screen)
+        pygame.display.flip()
 
     class Sprite (pygame.sprite.Sprite):
         def __init__(self, x, y, wid, hei, sprite_img):
