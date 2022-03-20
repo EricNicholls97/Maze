@@ -14,8 +14,18 @@ class Maze:
 
     def build_maze(self, p):
         self.matrix.braid(p)
-        while self.matrix.remove_all_squares() > 0:
-            self.matrix.braid(p)
+        # self.matrix.remove_all_squares()
+
+        # dends = 1
+        # squares = 1
+        # while dends > 0 and squares > 0:
+        #     self.matrix.braid(p)
+        #     squares = self.matrix.remove_all_squares()
+        #     dends = self.matrix.num_dends()
+        #     print("Squares: ", squares)
+        #     print("Dends: ", dends)
+        # while self.matrix.remove_all_squares() > 0:
+        #     self.matrix.braid(p)
 
         self.matrix.remove_all_basic_6_chains()
 

@@ -125,7 +125,6 @@ class Matrix:
 
         return rows_six, cols_six
 
-
     # convert coordinates. check surrounding segments and return neighbors
     def get_neighbors(self, r, c, open=True):
         open_bool = 1 if open else 0
@@ -139,6 +138,7 @@ class Matrix:
                 continue
             if self.__arr__[new_r][new_c] != open_bool:
                 a.append([r + neighbor[0], c + neighbor[1]])
+        print(r, c, a)
         return a
 
     def get_vert_walls(self):
@@ -305,12 +305,16 @@ class Matrix:
             i -= 1
         return True
 
+    def num_dends(self):
+        return len(self.__get_all_dead_ends__())
+
     def __get_all_dead_ends__(self):
         list1 = []
         for r in range(self.rows):
             for c in range(self.cols):
                 neighbors = self.get_neighbors(r, c)
-                if len(neighbors) == 1:
+                if len(neighbors) <= 1:
+                    # print(r, c, ":", len(neighbors))
                     list1.append((r, c))
         return list1
 
