@@ -8,6 +8,8 @@ class Painter:
     global cyan, black
 
     def __init__(self, width, height, UI_width, nrows, ncols):
+        self.zoom = 2
+
         self.metrics_written = 1
 
         self.width = width
@@ -20,7 +22,13 @@ class Painter:
 
         self.border = 20
         self.screen = pygame.display.set_mode((width, height))
+        self.display = pygame.Surface((self.game_width / self.zoom, self.height / self.zoom))
+
+        # self.display = pygame.Surface.subsurface(self.screen, (500, 500, self.game_width / self.zoom, self.height / self.zoom))
+
+
         self.screen.fill((0, 0, 0))
+        pygame.display.set_caption('Minotaurs Labyrinth')
 
         self.cell_width = self.game_width / ncols
         self.cell_height = height / nrows
@@ -43,25 +51,25 @@ class Painter:
         pygame.font.init()
         myfont = pygame.font.SysFont('Comic Sans MS', 25)
         textsurface = myfont.render(text, False, (255, 255, 255))
-        self.screen.blit(textsurface, (x, y))
+        self.display.blit(textsurface, (x, y))
 
-        pygame.display.update()
+        self.update()
 
         self.metrics_written += 1
 
     def draw_foundation(self):
         # clear screen
-        self.screen.fill((0, 0, 0))
+        self.display.fill((0, 0, 0))
 
         # left, bottom, top line (right line is UI line)
-        pygame.draw.line(self.screen, cyan, (1, 0), (1, self.height))   # left
-        pygame.draw.line(self.screen, cyan, (0, self.height-1), (self.game_width, self.height-1))   # bottom
-        pygame.draw.line(self.screen, cyan, (0, 1), (self.game_width, 1))  # top
+        pygame.draw.line(self.display, cyan, (1, 0), (1, self.height))   # left
+        pygame.draw.line(self.display, cyan, (0, self.height-1), (self.game_width, self.height-1))   # bottom
+        pygame.draw.line(self.display, cyan, (0, 1), (self.game_width, 1))  # top
 
         # UI line / right line
-        pygame.draw.line(self.screen, cyan, (self.game_width, 0), (self.game_width, self.height))
+        pygame.draw.line(self.display, cyan, (self.game_width-1, 0), (self.game_width-1, self.height))
 
-        pygame.display.update()
+        self.update()
 
     def draw_maze_lines(self, vert, horz):
         w = self.cell_width
@@ -72,17 +80,17 @@ class Painter:
                 i2 = i + 1
                 j2 = j + 1
                 if vert[i][j] == 1:
-                    pygame.draw.line(self.screen, cyan, (j2*w, i*h), (j2*w, i2*h))
+                    pygame.draw.line(self.display, cyan, (j2*w, i*h), (j2*w, i2*h))
 
         for i in range(len(horz)):
             for j in range(len(horz[0])):
                 i2 = i + 1
                 j2 = j + 1
                 if horz[i][j] == 1:
-                    pygame.draw.line(self.screen, cyan, (j*w, i2*h), (j2*w, i2*h))
+                    pygame.draw.line(self.display, cyan, (j*w, i2*h), (j2*w, i2*h))
 
         # ? : chance
-        pygame.display.update()
+        self.update()
 
     def add_group_chance(self, obj_list):
         if self.group_chance is not None:
@@ -101,7 +109,7 @@ class Painter:
 
     def add_group_player(self, player):
         if self.group_player is not None:
-            self.group_player.clear(self.screen, pygame.Surface((self.width, self.height)))     # clear group w/ surface
+            self.group_player.clear(self.display, pygame.Surface((self.width, self.height)))     # clear group w/ surface
         self.group_player = pygame.sprite.Group()
         w = self.cell_width
         h = self.cell_height
@@ -114,20 +122,34 @@ class Painter:
         self.group_player.add(spr)
 
     def draw_group_chance(self):
-        self.group_chance.draw(self.screen)
-        pygame.display.flip()
+        self.group_chance.draw(self.display)
+        self.update()
 
     def draw_group_player(self):
-        self.group_player.draw(self.screen)
-        pygame.display.flip()
+        self.group_player.draw(self.display)
+        self.update()
+
+    def update(self):
+        rect = [-100, 100]
+        if self.group_player is not None:
+            print('reached')
+            tup = self.group_player.sprites()[0]
+            print(tup.get_rect_spr())
+
+        self.screen.blit(pygame.transform.scale(self.display, (self.game_width, self.height)), rect)
+        pygame.display.update()
 
     class Sprite (pygame.sprite.Sprite):
         def __init__(self, x, y, wid, hei, sprite_img):
+            self.rect = [x, y]
             super().__init__()
             self.rect = pygame.Rect(x, y, wid, hei)
 
             image = pygame.image.load(sprite_img)
             self.image = pygame.transform.scale(image.convert_alpha(), (wid*2/3, hei*2/3))
+
+        def get_rect_spr(self):
+            return self.rect
 
 
 

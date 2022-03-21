@@ -138,7 +138,6 @@ class Matrix:
                 continue
             if self.__arr__[new_r][new_c] != open_bool:
                 a.append([r + neighbor[0], c + neighbor[1]])
-        print(r, c, a)
         return a
 
     def get_vert_walls(self):
