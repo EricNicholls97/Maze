@@ -8,7 +8,7 @@ class Painter:
     global cyan, black
 
     def __init__(self, width, height, UI_width, nrows, ncols):
-        self.zoom = 2
+        # self.zoom = 2
 
         self.metrics_written = 1
 
@@ -25,15 +25,14 @@ class Painter:
 
         # self.display = pygame.Surface.subsurface(self.screen, (500, 500, self.game_width / self.zoom, self.height / self.zoom))
 
-
         self.screen.fill((0, 0, 0))
         pygame.display.set_caption('Minotaurs Labyrinth')
 
         self.cell_width = self.game_width / ncols
         self.cell_height = height / nrows
 
-        self.surface_player = pygame.Surface((self.cell_width, self.cell_height))
-        self.surface_player.fill((0, 0, 0))
+        # self.surface_player = pygame.Surface((self.cell_width, self.cell_height))
+        # self.surface_player.fill((0, 0, 0))
 
         self.group_chance = None
         self.group_player = None
@@ -88,14 +87,7 @@ class Painter:
                 if horz[i][j] == 1:
                     pygame.draw.line(self.screen, cyan, (j*w, i2*h), (j2*w, i2*h))
 
-        zoom_size = (self.game_width / self.zoom, self.height / self.zoom)
-        zoom_area = pygame.Rect(0, 0, *zoom_size)
-        zoom_area.center = (0, 0)
-        zoom_surf = pygame.Surface(zoom_area.size)
-        zoom_surf.blit(self.screen, (0, 0), zoom_area)
-        zoom_surf = pygame.transform.smoothscale(zoom_surf, (self.game_width, self.height))
-        self.screen.blit(zoom_surf, (0, 0))
-
+        self.zoom(2, 200, 200)
         # ? : chance
         self.update()
 
@@ -136,13 +128,16 @@ class Painter:
         self.group_player.draw(self.screen)
         self.update()
 
-    def update(self):
-        # rect = [-100, 100]
-        # if self.group_player is not None:
-        #     print('reached')
-        #     tup = self.group_player.sprites()[0]
-        #     print(tup.get_rect_spr())
+    def zoom(self, zoom, x, y):
+        zoom_size = (self.game_width / zoom, self.height / zoom)
+        zoom_area = pygame.Rect(0, 0, *zoom_size)
+        zoom_area.center = (x, y)
+        zoom_surf = pygame.Surface(zoom_area.size)
+        zoom_surf.blit(self.screen, (0, 0), zoom_area)
+        zoom_surf = pygame.transform.smoothscale(zoom_surf, (self.game_width, self.height))
+        self.screen.blit(zoom_surf, (0, 0))
 
+    def update(self):
         # self.screen.blit(pygame.transform.scale(self.screen, (self.game_width, self.height)), rect)
         pygame.display.update()
 
