@@ -163,7 +163,7 @@ class Game:
 
 
 def main():
-    g = Game(1800)
+    g = Game(700)
     g.new_game()
 
 main()
