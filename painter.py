@@ -23,8 +23,16 @@ class Painter:
         self.border = 20
         self.screen = pygame.display.set_mode((width, height))
 
-        # self.display = pygame.Surface.subsurface(self.screen, (500, 500, self.game_width / self.zoom, self.height / self.zoom))
+        self.display = pygame.Surface((self.game_width / self.zoom, self.height / self.zoom))
 
+<<<<<<< Updated upstream
+=======
+        # scroll = [0, 0]
+        # scroll[0] = 300 - int(self.game_width / (self.zoom * 2)) + 2
+        # scroll[1] = 300 - int(self.height / (self.zoom * 2)) + 5
+        # self.display.blit(pygame.image.load("Sprites/green_red.png"), (300 - scroll[0], 300 - scroll[1]))
+
+>>>>>>> Stashed changes
         self.screen.fill((0, 0, 0))
         pygame.display.set_caption('Minotaurs Labyrinth')
 
@@ -49,7 +57,7 @@ class Painter:
         pygame.font.init()
         myfont = pygame.font.SysFont('Comic Sans MS', 25)
         textsurface = myfont.render(text, False, (255, 255, 255))
-        self.display.blit(textsurface, (x, y))
+        self.screen.blit(textsurface, (x, y))
 
         self.update()
 
@@ -128,6 +136,7 @@ class Painter:
         self.group_player.draw(self.screen)
         self.update()
 
+<<<<<<< Updated upstream
     def zoom(self, zoom, x, y):
         zoom_size = (self.game_width / zoom, self.height / zoom)
         zoom_area = pygame.Rect(0, 0, *zoom_size)
@@ -139,19 +148,19 @@ class Painter:
 
     def update(self):
         # self.screen.blit(pygame.transform.scale(self.screen, (self.game_width, self.height)), rect)
+=======
+    def update(self):
+        self.screen.blit(pygame.transform.scale(self.display, (self.game_width, self.height)), [0, 0])
+>>>>>>> Stashed changes
         pygame.display.update()
 
     class Sprite (pygame.sprite.Sprite):
         def __init__(self, x, y, wid, hei, sprite_img):
-            self.rect = [x, y]
             super().__init__()
             self.rect = pygame.Rect(x, y, wid, hei)
 
             image = pygame.image.load(sprite_img)
             self.image = pygame.transform.scale(image.convert_alpha(), (wid*2/3, hei*2/3))
-
-        def get_rect_spr(self):
-            return self.rect
 
 
 
