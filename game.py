@@ -17,7 +17,8 @@ class Game:
 
         self.game_obj_dict = {}
 
-        self.player1 = self.Sprite((self.rows - 1, random.randint(0, self.cols - 1)), 'player')
+        # self.player1 = self.Sprite((self.rows - 1, random.randint(0, self.cols - 1)), 'player')
+        self.player1 = self.Sprite((1, random.randint(0, self.cols - 1)), 'player')
 
         self.UI_bar_perc = 0.30
         self.UI_bar = self.UI_bar_perc * width
@@ -25,7 +26,6 @@ class Game:
 
         w = width / (self.cols + 1)
         h = height / self.rows
-
         self.painter = Painter(width, height, self.UI_bar, self.rows, self.cols)
 
         self.current_maze = None
@@ -44,6 +44,8 @@ class Game:
         self.game_loop()
 
     def draw_game(self):
+        self.painter.clear()
+
         # draw w/ Painter
         self.painter.draw_foundation()
         self.painter.draw_maze_lines(self.current_maze.get_vert_walls(), self.current_maze.get_horz_walls())
@@ -51,12 +53,9 @@ class Game:
         # painter draw_game
         game_obj_list = self.__get_array_of_game_obj_dict__(self.game_obj_dict)
 
-        self.painter.add_group_chance(game_obj_list)
-        self.painter.add_group_player(self.player1)
-
-        self.painter.draw_group_chance()
-        self.painter.draw_group_player()
-
+        loc = self.player1.get_loc()
+        img = self.player1.get_img()
+        self.painter.draw_object(loc[0], loc[1], img)
 
     def __create_game__(self, m):
         # add chances
@@ -76,19 +75,17 @@ class Game:
         return list(obj_dict.values())
 
     def game_loop(self):
+        clock = pygame.time.Clock()
         while True:
             if not self.get_pygame_input():
                 break
-
+            self.draw_game()
+            clock.tick(10)
         pass
 
     def __check_and_move_player__(self, direction_str):
         if self.current_maze.can_I_travel(self.player1.get_loc(), direction_str):
             self.__move__(direction_str)
-            self.painter.add_group_player(self.player1)
-            self.painter.draw_group_player()
-            self.painter.draw_group_chance()
-            self.clock.tick(10)
 
     def __move__(self, dir_str):
         dic = {'left': (0, -1), 'right': (0, 1), 'up': (-1, 0), 'down': (1, 0)}
@@ -133,37 +130,8 @@ class Game:
             self.row += r
             self.col += c
 
-
-    # # TODO: maybe replace w/ sprite class
-    # class Chance:
-    #     def __init__(self):
-    #         self.seed = random.randint(3, 7)
-    #
-    #     def get_symbol(self):
-    #         return "?"
-    #
-    # class Player:
-    #     def __init__(self, st_row, st_col):
-    #         self.row = st_row
-    #         self.col = st_col
-    #
-    #     def get_loc(self):
-    #         return self.row, self.col
-    #
-    #     # direction = 0: left   1: right   2: up   3: down
-    #     def move(self, direction_str):
-    #         if direction_str == "left":
-    #             self.col -= 1
-    #         if direction_str == "right":
-    #             self.col += 1
-    #         if direction_str == "up":
-    #             self.row -= 1
-    #         if direction_str == "down":
-    #             self.row += 1
-
-
 def main():
-    g = Game(700)
+    g = Game(1800)
     g.new_game()
 
 main()
