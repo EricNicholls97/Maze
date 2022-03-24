@@ -8,7 +8,7 @@ class Painter:
     global cyan, black
 
     def __init__(self, width, height, UI_width, nrows, ncols):
-        self.zoom = 2
+        self.zoom = 1
 
         self.metrics_written = 1
 
@@ -20,17 +20,20 @@ class Painter:
 
         pygame.init()
 
+        pygame.display.set_caption('Minotaurs Labyrinth')
         self.border = 20
         self.screen = pygame.display.set_mode((width, height))
-        # scroll = [0, 0]
-        # scroll[0] = 300 - int(self.game_width / (self.zoom * 2)) + 2
-        # scroll[1] = 300 - int(self.height / (self.zoom * 2)) + 5
-        # self.display.blit(pygame.image.load("Sprites/green_red.png"), (300 - scroll[0], 300 - scroll[1]))
-
-        # self.screen.set_caption('Minotaurs Labyrinth')
 
         self.cell_width = self.game_width / ncols
         self.cell_height = height / nrows
+
+        factor = self.game_width / 1800
+        self.object_size = (30*factor, 30*factor)
+        print(self.object_size)
+
+        # 1800 = 30
+        # 1200 = 20
+
 
     def write_metric(self, name, metric_value, metric_score):
         # UI bar text
@@ -82,14 +85,16 @@ class Painter:
                 if horz[i][j] == 1:
                     pygame.draw.line(self.screen, cyan, (j*w, i2*h), (j2*w, i2*h))
 
-        # self.zoom_func(2, 0, 0)
-        # ? : chance
         self.update()
 
     def draw_object(self, r, c, image_link):
         my_img = pygame.image.load(image_link)
         x = (c + 1/5) * self.cell_width
         y = (r + 1/5) * self.cell_height
+
+        print(my_img.get_rect())
+        print(self.object_size)
+        pygame.transform.scale(my_img, self.object_size)
 
         self.screen.blit(my_img, (x, y))
         self.update()
@@ -145,7 +150,7 @@ class Painter:
         self.screen.blit(zoom_surf, (0, 0))
 
     def update(self):
-        self.zoom_func(1, -100, -100)
+        self.zoom_func(self.zoom, 0, 0)
         pygame.display.update()
 
     class Sprite (pygame.sprite.Sprite):

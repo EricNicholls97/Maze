@@ -18,7 +18,7 @@ class Game:
         self.game_obj_dict = {}
 
         # self.player1 = self.Sprite((self.rows - 1, random.randint(0, self.cols - 1)), 'player')
-        self.player1 = self.Sprite((1, random.randint(0, self.cols - 1)), 'player')
+        self.player1 = self.Sprite((0, 0), 'player')
 
         self.UI_bar_perc = 0.30
         self.UI_bar = self.UI_bar_perc * width
@@ -50,9 +50,10 @@ class Game:
         self.painter.draw_foundation()
         self.painter.draw_maze_lines(self.current_maze.get_vert_walls(), self.current_maze.get_horz_walls())
 
-        # painter draw_game
+        # draw objects (TODO)
         game_obj_list = self.__get_array_of_game_obj_dict__(self.game_obj_dict)
 
+        # draw player
         loc = self.player1.get_loc()
         img = self.player1.get_img()
         self.painter.draw_object(loc[0], loc[1], img)
@@ -80,17 +81,8 @@ class Game:
             if not self.get_pygame_input():
                 break
             self.draw_game()
-            clock.tick(10)
+            clock.tick(2)
         pass
-
-    def __check_and_move_player__(self, direction_str):
-        if self.current_maze.can_I_travel(self.player1.get_loc(), direction_str):
-            self.__move__(direction_str)
-
-    def __move__(self, dir_str):
-        dic = {'left': (0, -1), 'right': (0, 1), 'up': (-1, 0), 'down': (1, 0)}
-        loc_off = dic[dir_str]
-        self.player1.move_loc(loc_off[0], loc_off[1])
 
     def get_pygame_input(self):
         events = pygame.event.get()
@@ -110,6 +102,15 @@ class Game:
                     self.__check_and_move_player__("right")
 
         return True
+
+    def __check_and_move_player__(self, direction_str):
+        if self.current_maze.can_I_travel(self.player1.get_loc(), direction_str):
+            self.__move__(direction_str)
+
+    def __move__(self, dir_str):
+        dic = {'left': (0, -1), 'right': (0, 1), 'up': (-1, 0), 'down': (1, 0)}
+        loc_off = dic[dir_str]
+        self.player1.move_loc(loc_off[0], loc_off[1])
 
     class Sprite:
         def __init__(self, loc, type):
@@ -131,7 +132,7 @@ class Game:
             self.col += c
 
 def main():
-    g = Game(1800)
+    g = Game(1000)
     g.new_game()
 
 main()
