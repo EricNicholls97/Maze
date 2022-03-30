@@ -8,7 +8,6 @@ class Painter:
     global cyan, black
 
     def __init__(self, width, height, UI_width, nrows, ncols):
-        self.zoom = 1
 
         self.metrics_written = 1
 
@@ -27,13 +26,13 @@ class Painter:
         self.cell_width = self.game_width / ncols
         self.cell_height = height / nrows
 
-        factor = self.game_width / 1800
-        self.object_size = (30*factor, 30*factor)
-        print(self.object_size)
+        sz = 30 * self.game_width / 1000
+        self.object_sizes = (sz, sz)
+
+        print(self.width, self.height)
 
         # 1800 = 30
         # 1200 = 20
-
 
     def write_metric(self, name, metric_value, metric_score):
         # UI bar text
@@ -49,14 +48,9 @@ class Painter:
         textsurface = myfont.render(text, False, (255, 255, 255))
         self.screen.blit(textsurface, (x, y))
 
-        self.update()
-
         self.metrics_written += 1
 
     def draw_foundation(self):
-        # clear screen
-        self.screen.fill((0, 0, 0))
-
         # left, bottom, top line (right line is UI line)
         pygame.draw.line(self.screen, cyan, (1, 0), (1, self.height))   # left
         pygame.draw.line(self.screen, cyan, (0, self.height-1), (self.game_width, self.height-1))   # bottom
@@ -65,7 +59,6 @@ class Painter:
         # UI line / right line
         pygame.draw.line(self.screen, cyan, (self.game_width-1, 0), (self.game_width-1, self.height))
 
-        self.update()
 
     def draw_maze_lines(self, vert, horz):
         w = self.cell_width
@@ -85,19 +78,14 @@ class Painter:
                 if horz[i][j] == 1:
                     pygame.draw.line(self.screen, cyan, (j*w, i2*h), (j2*w, i2*h))
 
-        self.update()
-
     def draw_object(self, r, c, image_link):
         my_img = pygame.image.load(image_link)
-        x = (c + 1/5) * self.cell_width
-        y = (r + 1/5) * self.cell_height
+        x = (c + 1/8) * self.cell_width
+        y = (r + 1/8) * self.cell_height
 
-        print(my_img.get_rect())
-        print(self.object_size)
-        pygame.transform.scale(my_img, self.object_size)
+        my_img = pygame.transform.scale(my_img, self.object_sizes)
 
         self.screen.blit(my_img, (x, y))
-        self.update()
 
     def clear(self):
         self.screen.fill((0, 0, 0))
@@ -143,15 +131,21 @@ class Painter:
     def zoom_func(self, zoom, x, y):
         zoom_size = (self.game_width / zoom, self.height / zoom)
         zoom_area = pygame.Rect(0, 0, *zoom_size)
-        zoom_area.center = (x, y)
+        zoom_area.center = (x - zoom_size[0]/2, y - zoom_size[1]/2)     # subtract half of width/ height to get center
         zoom_surf = pygame.Surface(zoom_area.size)
         zoom_surf.blit(self.screen, (0, 0), zoom_area)
         zoom_surf = pygame.transform.smoothscale(zoom_surf, (self.game_width, self.height))
         self.screen.blit(zoom_surf, (0, 0))
 
+    def zoom(self, perc, loc):
+        zoom = 100/perc
+        adjust = self.height / 2
+        x = loc[1] * self.cell_width
+        y = loc[0] * self.cell_height
+        self.zoom_func(zoom, x + adjust/zoom, y + adjust/zoom)
+
     def update(self):
-        self.zoom_func(self.zoom, 0, 0)
-        pygame.display.update()
+        pygame.display.flip()
 
     class Sprite (pygame.sprite.Sprite):
         def __init__(self, x, y, wid, hei, sprite_img):

@@ -44,7 +44,7 @@ class Game:
         self.game_loop()
 
     def draw_game(self):
-        self.painter.clear()
+        # self.painter.clear()
 
         # draw w/ Painter
         self.painter.draw_foundation()
@@ -78,11 +78,13 @@ class Game:
     def game_loop(self):
         clock = pygame.time.Clock()
         while True:
-            if not self.get_pygame_input():
-                break
+            self.get_pygame_input()
+            self.painter.clear()
             self.draw_game()
-            clock.tick(2)
-        pass
+            self.painter.zoom(50, self.player1.get_loc())
+            self.painter.update()
+            clock.tick(60)
+
 
     def get_pygame_input(self):
         events = pygame.event.get()
