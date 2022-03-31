@@ -133,6 +133,7 @@ class Game:
             self.row += r
             self.col += c
 
+
 def main():
     g = Game(1000)
     g.new_game()
