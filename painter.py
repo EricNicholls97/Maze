@@ -7,7 +7,7 @@ black = (0, 0, 0)
 class Painter:
     global cyan, black
 
-    def __init__(self, width, height, UI_width, nrows, ncols):
+    def __init__(self, width, height, UI_width, nrows, ncols):                                                                                                                                                                                                                                                                                                                         
 
         self.metrics_written = 1
 
@@ -59,8 +59,7 @@ class Painter:
         # UI line / right line
         pygame.draw.line(self.screen, cyan, (self.game_width-1, 0), (self.game_width-1, self.height))
 
-
-    def draw_maze_lines(self, vert, horz):
+    def draw_maze(self, vert, horz):
         w = self.cell_width
         h = self.cell_height
 
