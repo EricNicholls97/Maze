@@ -3,7 +3,7 @@ import pygame, random
 from painter import Painter
 import game
 
-class Player:
+class MyPlayer:
     def __init__(self, nrows, ncols):
         self.painter = Painter(nrows, ncols)
 

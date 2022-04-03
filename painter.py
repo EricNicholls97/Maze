@@ -7,29 +7,30 @@ black = (0, 0, 0)
 class Painter:
     global cyan, black
 
-    def __init__(self, width, height, UI_width, nrows, ncols):                                                                                                                                                                                                                                                                                                                         
+    def __init__(self, nrows, ncols):
 
-        self.metrics_written = 1
+        full_width = 1800
+        UI_perc = 0.3
 
-        self.width = width
-        self.height = height
+        self.UI_bar_len = UI_perc * full_width
 
-        self.UI_width = UI_width
-        self.game_width = width - UI_width
+        self.game_width = full_width - self.UI_bar_len
+        self.game_height = self.game_width
+
 
         pygame.init()
 
         pygame.display.set_caption('Minotaurs Labyrinth')
         self.border = 20
-        self.screen = pygame.display.set_mode((width, height))
+        self.screen = pygame.display.set_mode((self.game_width, self.game_height))
 
         self.cell_width = self.game_width / ncols
-        self.cell_height = height / nrows
+        self.cell_height = self.game_height / nrows
 
         sz = 30 * self.game_width / 1000
         self.object_sizes = (sz, sz)
 
-        print(self.width, self.height)
+        # self.metrics_written = 1
 
         # 1800 = 30
         # 1200 = 20
@@ -50,15 +51,6 @@ class Painter:
 
         self.metrics_written += 1
 
-    def draw_foundation(self):
-        # left, bottom, top line (right line is UI line)
-        pygame.draw.line(self.screen, cyan, (1, 0), (1, self.height))   # left
-        pygame.draw.line(self.screen, cyan, (0, self.height-1), (self.game_width, self.height-1))   # bottom
-        pygame.draw.line(self.screen, cyan, (0, 1), (self.game_width, 1))  # top
-
-        # UI line / right line
-        pygame.draw.line(self.screen, cyan, (self.game_width-1, 0), (self.game_width-1, self.height))
-
     def draw_maze(self, vert, horz):
         w = self.cell_width
         h = self.cell_height
@@ -76,6 +68,15 @@ class Painter:
                 j2 = j + 1
                 if horz[i][j] == 1:
                     pygame.draw.line(self.screen, cyan, (j*w, i2*h), (j2*w, i2*h))
+
+        # left, bottom, top line (right line is UI line)
+        pygame.draw.line(self.screen, cyan, (1, 0), (1, self.height))   # left
+        pygame.draw.line(self.screen, cyan, (0, self.height-1), (self.game_width, self.height-1))   # bottom
+        pygame.draw.line(self.screen, cyan, (0, 1), (self.game_width, 1))  # top
+
+        # UI line / right line
+        pygame.draw.line(self.screen, cyan, (self.game_width-1, 0), (self.game_width-1, self.height))
+
 
     def draw_object(self, r, c, image_link):
         my_img = pygame.image.load(image_link)

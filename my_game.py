@@ -1,7 +1,7 @@
 from matrix import Matrix
 from maze import Maze
 from painter import Painter
-import player
+from player import Player
 from item import Item
 
 import maze_factory
@@ -19,7 +19,7 @@ class Game:
 
         self.game_obj_dict = {}
 
-        self.player = player.Player(self.rows, self.cols)
+        self.player = Player(self.rows, self.cols)
 
         self.current_maze = None
         self.num_mazes = 1
