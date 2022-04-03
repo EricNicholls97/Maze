@@ -66,12 +66,12 @@ class Painter:
                     pygame.draw.line(self.screen, cyan, (j*w, i2*h), (j2*w, i2*h))
 
         # left, bottom, top line (right line is UI line)
-        pygame.draw.line(self.screen, cyan, (1, 0), (1, self.height))   # left
-        pygame.draw.line(self.screen, cyan, (0, self.height-1), (self.game_width, self.height-1))   # bottom
+        pygame.draw.line(self.screen, cyan, (1, 0), (1, self.game_height))   # left
+        pygame.draw.line(self.screen, cyan, (0, self.game_height-1), (self.game_width, self.game_height-1))   # bottom
         pygame.draw.line(self.screen, cyan, (0, 1), (self.game_width, 1))  # top
 
         # UI line / right line
-        pygame.draw.line(self.screen, cyan, (self.game_width-1, 0), (self.game_width-1, self.height))
+        pygame.draw.line(self.screen, cyan, (self.game_width-1, 0), (self.game_width-1, self.game_height))
 
     def draw_object(self, r, c, image_link):
         my_img = pygame.image.load(image_link)
@@ -85,56 +85,18 @@ class Painter:
     def clear(self):
         self.screen.fill((0, 0, 0))
 
-    # def add_group_chance(self, obj_list):
-    #     if self.group_chance is not None:
-    #         self.group_chance.clear(self.screen, pygame.Surface((self.width, self.height)))
-    #     self.group_chance = pygame.sprite.Group()
-    #     w = self.cell_width
-    #     h = self.cell_height
-    #
-    #     for el in obj_list:
-    #         el_loc = el.get_loc()
-    #         x = el_loc[1] * w + (w * 1/5)
-    #         y = el_loc[0] * h + (h * 1/5)
-    #         el_img = el.get_img()
-    #         spr = self.Sprite(x, y, w, h, el_img)
-    #         self.group_chance.add(spr)
-    #
-    # def add_group_player(self, player):
-    #     if self.group_player is not None:
-    #         self.group_player.clear(self.screen, pygame.Surface((self.width, self.height)))     # clear group w/ surface
-    #     self.group_player = pygame.sprite.Group()
-    #     w = self.cell_width
-    #     h = self.cell_height
-    #
-    #     ploc = player.get_loc()
-    #     x = ploc[1] * w + (w * 1 / 5)
-    #     y = ploc[0] * h + (h * 1 / 5)
-    #     p_img = player.get_img()
-    #     spr = self.Sprite(x, y, w, h, p_img)
-    #
-    # def draw_group_chance(self):
-    #     self.group_chance.draw(self.screen)
-    #     self.zoom_func_2(2, 0, 0)
-    #     self.update()
-    #
-    # def draw_group_player(self):
-    #     self.group_player.draw(self.screen)
-    #     self.zoom_func_2(2, 0, 0)
-    #     self.update()
-
     def zoom_func(self, zoom, x, y):
-        zoom_size = (self.game_width / zoom, self.height / zoom)
+        zoom_size = (self.game_width / zoom, self.game_height / zoom)
         zoom_area = pygame.Rect(0, 0, *zoom_size)
         zoom_area.center = (x - zoom_size[0]/2, y - zoom_size[1]/2)     # subtract half of width/ height to get center
         zoom_surf = pygame.Surface(zoom_area.size)
         zoom_surf.blit(self.screen, (0, 0), zoom_area)
-        zoom_surf = pygame.transform.smoothscale(zoom_surf, (self.game_width, self.height))
+        zoom_surf = pygame.transform.smoothscale(zoom_surf, (self.game_width, self.game_height))
         self.screen.blit(zoom_surf, (0, 0))
 
     def zoom(self, perc, loc):
         zoom = 100/perc
-        adjust = self.height / 2
+        adjust = self.game_height / 2
         x = loc[1] * self.cell_width
         y = loc[0] * self.cell_height
         self.zoom_func(zoom, x + adjust/zoom, y + adjust/zoom)
