@@ -1,6 +1,7 @@
 from matrix import Matrix
 from maze import Maze
 from painter import Painter
+from player import Player
 from item import Item
 
 import maze_factory
@@ -17,6 +18,8 @@ class Game:
         # self.game_arr = [[None] * self.cols for _ in range(self.rows)] # store all objects in game obj list
 
         self.game_obj_dict = {}
+
+        self.player = Player(self.rows, self.cols)
 
         self.current_maze = None
         self.num_mazes = 1
