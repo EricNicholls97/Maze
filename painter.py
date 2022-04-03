@@ -17,7 +17,6 @@ class Painter:
         self.game_width = full_width - self.UI_bar_len
         self.game_height = self.game_width
 
-
         pygame.init()
 
         pygame.display.set_caption('Minotaurs Labyrinth')
@@ -31,9 +30,6 @@ class Painter:
         self.object_sizes = (sz, sz)
 
         # self.metrics_written = 1
-
-        # 1800 = 30
-        # 1200 = 20
 
     def write_metric(self, name, metric_value, metric_score):
         # UI bar text
@@ -76,7 +72,6 @@ class Painter:
 
         # UI line / right line
         pygame.draw.line(self.screen, cyan, (self.game_width-1, 0), (self.game_width-1, self.height))
-
 
     def draw_object(self, r, c, image_link):
         my_img = pygame.image.load(image_link)
