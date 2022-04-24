@@ -9,6 +9,8 @@ class Painter:
 
     def __init__(self, nrows, ncols):
 
+        self.nrows = nrows
+
         full_width = 1800
         UI_perc = 0.3
 
@@ -26,8 +28,10 @@ class Painter:
         self.cell_width = self.game_width / ncols
         self.cell_height = self.game_height / nrows
 
-        sz = 30 * self.game_width / 1000
-        self.object_sizes = (sz, sz)
+        factor = 2/3
+        sz_w = self.cell_width * factor
+        sz_h = self.cell_height * factor
+        self.object_sizes = (sz_w, sz_h)
 
         # self.metrics_written = 1
 
@@ -47,7 +51,7 @@ class Painter:
 
         self.metrics_written += 1
 
-    def draw_maze(self, vert, horz):
+    def draw_maze(self, horz, vert):
         w = self.cell_width
         h = self.cell_height
 
@@ -56,6 +60,7 @@ class Painter:
                 i2 = i + 1
                 j2 = j + 1
                 if vert[i][j] == 1:
+                    # print((j2*w, i*h), (j2*w, i2*h))
                     pygame.draw.line(self.screen, cyan, (j2*w, i*h), (j2*w, i2*h))
 
         for i in range(len(horz)):
@@ -94,8 +99,9 @@ class Painter:
         zoom_surf = pygame.transform.smoothscale(zoom_surf, (self.game_width, self.game_height))
         self.screen.blit(zoom_surf, (0, 0))
 
-    def zoom(self, perc, loc):
-        zoom = 100/perc
+    def zoom(self, length, loc):
+        inv_ratio = self.nrows / length      # inverse of ratio
+        zoom = inv_ratio
         adjust = self.game_height / 2
         x = loc[1] * self.cell_width
         y = loc[0] * self.cell_height
@@ -103,6 +109,9 @@ class Painter:
 
     def update(self):
         pygame.display.flip()
+
+    def draw_game(self, subrows, subcols, maze_lines, obj_list):
+        pass
 
     class Sprite (pygame.sprite.Sprite):
         def __init__(self, x, y, wid, hei, sprite_img):

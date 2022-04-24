@@ -29,11 +29,8 @@ class Maze:
 
         self.matrix.remove_all_basic_6_chains()
 
-    def get_vert_walls(self):
-        return self.matrix.get_vert_walls()
-
-    def get_horz_walls(self):
-        return self.matrix.get_horz_walls()
+    def get_walls(self):
+        return self.matrix.get_horz_walls(), self.matrix.get_vert_walls()
 
     def remove_all_squares(self):
         self.matrix.remove_all_squares()

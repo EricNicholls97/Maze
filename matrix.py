@@ -62,7 +62,6 @@ class Matrix:
             if len(dead_ends) == 0:
                 break
 
-
     # TODO: print all chains
     def remove_all_basic_6_chains(self):
         six_rows, six_cols = self.__find_all_basic_6_chains__()
