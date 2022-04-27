@@ -6,11 +6,11 @@ import random, time, math
 
 # TODO: make matrix private (later so you can test in driver)
 class Maze:
-    def __init__(self, rows, cols):
-        self.rows = rows
-        self.cols = cols
+    def __init__(self, nrows, ncols):
+        self.nrows = nrows
+        self.ncols = ncols
 
-        self.matrix = Matrix(rows, cols)
+        self.matrix = Matrix(nrows, ncols)
 
     def build_maze(self, p):
         self.matrix.braid(p)
@@ -28,6 +28,8 @@ class Maze:
         #     self.matrix.braid(p)
 
         self.matrix.remove_all_basic_6_chains()
+
+        self.matrix.draw_arr = self.matrix.get_drawable_arr()
 
     def get_walls(self):
         return self.matrix.get_horz_walls(), self.matrix.get_vert_walls()

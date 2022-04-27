@@ -14,8 +14,9 @@ class Player:
         self.ncols = ncols
 
         self.img = 'Sprites/purple_pink.png'
-        self.row = nrows - 1
-        self.col = random.randint(0, ncols - 1)
+        st_dfe = 5       # starting distance from edge range
+        self.row = random.randint(st_dfe, nrows - 1 - st_dfe)
+        self.col = random.randint(st_dfe, ncols - 1 - st_dfe)
 
         self.visibility = Visibility(nrows, ncols)
         self.__set_visibility__(self.row, self.col)
@@ -78,7 +79,8 @@ class Player:
 
         loc, diffs = self.visibility.get_location_specs()
         sq = max(diffs)
-        self.painter.zoom(sq + 2, loc)
+        sq = max(sq + 1, 8)
+        self.painter.zoom(sq, loc)
 
         self.painter.update()
 

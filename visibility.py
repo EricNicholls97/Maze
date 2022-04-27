@@ -49,8 +49,8 @@ class Visibility:
 
     def get_location_specs(self):
         # returns halfway point for row, col, then row diff and col diff
-        halfway = ((self.min_row + self.max_row) / 2, (self.min_col + self.max_col) / 2)
-        diff = (self.max_row - self.min_row, self.max_col - self.min_col)
+        halfway = ((self.min_row + self.max_row) / 2, (self.min_col + self.max_col) / 2)        # (rows, cols)
+        diff = (self.max_row - self.min_row, self.max_col - self.min_col)                       # (rows, cols)
         return halfway, diff
 
     def get_square_size(self):

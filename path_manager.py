@@ -6,7 +6,7 @@ class PathManager:
 
     def flood(self, st_r, st_c):
         paths = [self.Path(st_r, st_c)]
-        visited = [[0 for _ in range(self.matrix.rows)] for _ in range(self.matrix.cols)]
+        visited = [[0 for _ in range(self.matrix.nrows)] for _ in range(self.matrix.ncols)]
 
         while len(paths) > 0:
             p = paths.pop()
@@ -18,8 +18,8 @@ class PathManager:
                 if visited[rn][cn] == 0:
                     paths.append(self.Path(rn, cn, 0, p))
 
-        for row in range(self.matrix.rows):
-            for col in range(self.matrix.cols):
+        for row in range(self.matrix.nrows):
+            for col in range(self.matrix.ncols):
                 if visited[row][col] == 0:
                     return False
         return True
@@ -30,7 +30,7 @@ class PathManager:
 
         paths = [self.Path(r, c)]
 
-        visited = [[False for _ in range(self.matrix.cols)] for _ in range(self.matrix.rows)]
+        visited = [[False for _ in range(self.matrix.ncols)] for _ in range(self.matrix.nrows)]
 
         while len(paths) > 0:
             path = paths.pop(0)

@@ -22,12 +22,14 @@ def __get_neighbors_array__():
 # matrix coordinates vs cell coordinates
 class Matrix:
     def __init__(self, n, m):
-        self.rows = n
-        self.cols = m
+        self.nrows = n
+        self.ncols = m
         self.n = 2 * n - 1
         self.m = 2 * m - 1
         self.__arr__ = self.__init_empty_arr__(n, m)
         self.generate_random_maze()
+
+        # self.__arr__
 
     def __str__(self):
         s = ''
@@ -62,7 +64,6 @@ class Matrix:
             if len(dead_ends) == 0:
                 break
 
-    # TODO: print all chains
     def remove_all_basic_6_chains(self):
         six_rows, six_cols = self.__find_all_basic_6_chains__()
 
@@ -95,12 +96,42 @@ class Matrix:
             self.__arr__[walL_loc_1[0]][walL_loc_1[1]] = 1
             self.__arr__[walL_loc_2[0]][walL_loc_2[1]] = 1
 
+    def get_drawable_arr(self):
+        # create new array of two size bigger and copy arr into center (+1)
+        new_arr = self.__init_empty_arr__(self.nrows + 2, self.ncols + 2)
+        for r in range(self.nrows):
+            for c in range(self.ncols):
+                new_arr[r+1][c+1] = self.__arr__[r][c]
+
+        # set outer walls:
+        # left wall always starts with 1 -1 1 -1
+        # every row, left and right col
+        # every col; top and bottom row
+        for r in range(0, self.nrows+2):
+            if r%2==0:
+                new_arr[r][0] = 1
+            else:
+                new_arr[r][0] = -1
+
+        for c in range(0, self.ncols + 2):
+            if c%2==0:
+                new_arr[0][c] = -1
+            else:
+                new_arr[0][c] = 1
+
+        for r in range(self.nrows + 2):
+            for c in range(self.ncols + 2):
+                print(new_arr[r][c], end=" ")
+            print()
+
+        return new_arr
+
     def __find_all_basic_6_chains__(self):
         rows_six = []
         cols_six = []
-        for r in range(self.rows):
+        for r in range(self.nrows):
             conseq = 0
-            for c in range(self.cols):
+            for c in range(self.ncols):
                 b1, b2 = self.__is_basic_six_metric__(r, c, 6)  # returns horizontal, vertical from top left
                 if b2:
                     conseq += 1\
@@ -112,9 +143,9 @@ class Matrix:
                     rows_six.append((r, c-1, conseq))
                     conseq = 0
 
-        for c in range(self.cols):
+        for c in range(self.ncols):
             conseq = 0
-            for r in range(self.rows):
+            for r in range(self.nrows):
                 b1, b2 = self.__is_basic_six_metric__(r, c, 6)  # returns horizontal, vertical from top left
                 if b1:
                     conseq += 1
@@ -140,21 +171,25 @@ class Matrix:
         return a
 
     def get_vert_walls(self):
+        # draw_arr = self.get_drawable_arr()
         vert = []
         # vertical
         for r in range(0, self.n, 2):
             a = []
             for c in range(1, self.m, 2):
+                # a.append(draw_arr[r][c])
                 a.append(self.__arr__[r][c])
             vert.append(a)
         return vert
 
     def get_horz_walls(self):
+        # draw_arr = self.get_drawable_arr()
         hori = []
         # horizontal
         for r in range(1, self.n, 2):
             a = []
             for c in range(0, self.m, 2):
+                # a.append(draw_arr[r][c])
                 a.append(self.__arr__[r][c])
             hori.append(a)
         return hori
@@ -189,8 +224,8 @@ class Matrix:
         count = 0
         a = []
 
-        for r in range(self.rows):
-            for c in range(self.cols):
+        for r in range(self.nrows):
+            for c in range(self.ncols):
                 b1, b2 = self.__is_basic_six_metric__(r, c, k)  # returns horizontal, vertical from top left
                 if b1:
                     a.append(__convert_coor__(r, c, True))
@@ -258,8 +293,8 @@ class Matrix:
 
         cum = 0
         biggest_shortest_loop = (-1, -1, 0)
-        for r in range(self.rows):
-            for c in range(self.cols):
+        for r in range(self.nrows):
+            for c in range(self.ncols):
                 v = pm.get_shortest_loop(r, c)
                 if v > biggest_shortest_loop[2]:
                     biggest_shortest_loop = (r, c, v)
@@ -308,8 +343,8 @@ class Matrix:
 
     def __get_all_dead_ends__(self):
         list1 = []
-        for r in range(self.rows):
-            for c in range(self.cols):
+        for r in range(self.nrows):
+            for c in range(self.ncols):
                 neighbors = self.get_neighbors(r, c)
                 if len(neighbors) <= 1:
                     # print(r, c, ":", len(neighbors))

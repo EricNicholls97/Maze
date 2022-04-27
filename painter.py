@@ -71,12 +71,13 @@ class Painter:
                     pygame.draw.line(self.screen, cyan, (j*w, i2*h), (j2*w, i2*h))
 
         # left, bottom, top line (right line is UI line)
-        pygame.draw.line(self.screen, cyan, (1, 0), (1, self.game_height))   # left
-        pygame.draw.line(self.screen, cyan, (0, self.game_height-1), (self.game_width, self.game_height-1))   # bottom
-        pygame.draw.line(self.screen, cyan, (0, 1), (self.game_width, 1))  # top
+
+        # pygame.draw.line(self.screen, cyan, (1, 0), (1, self.game_height))   # left
+        # pygame.draw.line(self.screen, cyan, (0, self.game_height-1), (self.game_width, self.game_height-1))   # bottom
+        # pygame.draw.line(self.screen, cyan, (0, 1), (self.game_width, 1))  # top
 
         # UI line / right line
-        pygame.draw.line(self.screen, cyan, (self.game_width-1, 0), (self.game_width-1, self.game_height))
+        # pygame.draw.line(self.screen, cyan, (self.game_width-1, 0), (self.game_width-1, self.game_height))
 
     def draw_object(self, r, c, image_link):
         my_img = pygame.image.load(image_link)
@@ -99,8 +100,8 @@ class Painter:
         zoom_surf = pygame.transform.smoothscale(zoom_surf, (self.game_width, self.game_height))
         self.screen.blit(zoom_surf, (0, 0))
 
-    def zoom(self, length, loc):
-        inv_ratio = self.nrows / length      # inverse of ratio
+    def zoom(self, num_rows, loc):
+        inv_ratio = self.nrows / num_rows   # num_rows was length    # inverse of ratio
         zoom = inv_ratio
         adjust = self.game_height / 2
         x = loc[1] * self.cell_width
