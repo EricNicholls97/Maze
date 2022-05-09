@@ -23,7 +23,6 @@ class Player:
 
         self.painter = Painter(nrows, ncols)
 
-
     def get_img(self):
         return self.img
 
@@ -75,7 +74,12 @@ class Player:
         upd_lines = self.visibility.filter_walls(*self.maze_lines)
 
         self.painter.draw_maze(*upd_lines)
+
         self.painter.draw_object(self.row, self.col, self.img)
+
+        # all_objs_list = self.game.get_all_drawables()
+        # for el in all_objs_list:
+        #     self.painter.draw_object(el[0], el[1], el[2])
 
         loc, diffs = self.visibility.get_location_specs()
         sq = max(diffs)

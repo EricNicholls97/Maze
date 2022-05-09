@@ -1,7 +1,7 @@
 from matrix import Matrix
 from maze import Maze
 from painter import Painter
-from item import Item
+from objecto import Objecto
 from player import Player
 
 import maze_factory
@@ -32,17 +32,15 @@ class Game:
         m = maze_factory.create_maze(self.num_mazes, self.rows, self.cols)
         self.current_maze = m
 
-        num_chances = 8
-        i = 0
-        while i < num_chances:
-            r = random.randint(0, self.rows - 1)
-            c = random.randint(0, self.cols - 1)
-            if (r, c) in self.game_object_dict.keys():
-                continue
-            spr = Item((r, c), 'chance')
-            self.game_object_dict[(r, c)] = spr
-            i += 1
+        self.__create_chances__(8)
 
+        self.__create_and_start_players__()
+
+    def get_object_list(self):
+        print("Dict verion: ", list(self.game_object_dict.values()))
+        return list(self.game_object_dict.values())
+
+    def __create_and_start_players__(self):
         for i in range(self.num_players):
             p = Player(self.current_maze, self.rows, self.cols)
             self.players_list.append(p)
@@ -50,9 +48,23 @@ class Game:
         for el in self.players_list:
             el.game_loop()
 
-    def get_object_list(self):
-        print("Dict verion: ", list(self.game_object_dict.values()))
-        return list(self.game_object_dict.values())
+    def __create_chances__(self, num_chances):
+        i = 0
+        while i < num_chances:
+            r = random.randint(0, self.rows - 1)
+            c = random.randint(0, self.cols - 1)
+            if (r, c) in self.game_object_dict.keys():
+                continue
+            spr = Objecto((r, c), 'chance')
+            self.game_object_dict[(r, c)] = spr
+            i += 1
+
+    def get_all_drawables(self):
+        a = []
+        for key in self.game_object_dict.keys():
+            objecto = self.game_object_dict[key]
+            a.append (objecto.get_drawable())
+
 
 def main():
     g = Game()

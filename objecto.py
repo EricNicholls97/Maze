@@ -1,6 +1,6 @@
 
 
-class Item:
+class Objecto:
     def __init__(self, loc, type):
         self.row = loc[0]
         self.col = loc[1]
@@ -8,6 +8,7 @@ class Item:
         self.img = None
         if self.type == 'chance':
             self.img = 'Sprites/question_mark.png'
+
 
     def __get_img__(self):
         return self.img
