@@ -22,7 +22,7 @@ class Painter:
         pygame.init()
 
         pygame.display.set_caption('Minotaurs Labyrinth')
-        self.border = 20
+        self.border = 500
         self.screen = pygame.display.set_mode((self.game_width, self.game_height))
 
         self.cell_width = self.game_width / ncols
@@ -110,9 +110,6 @@ class Painter:
 
     def update(self):
         pygame.display.flip()
-
-    def draw_game(self, subrows, subcols, maze_lines, obj_list):
-        pass
 
     class Sprite (pygame.sprite.Sprite):
         def __init__(self, x, y, wid, hei, sprite_img):

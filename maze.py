@@ -104,25 +104,25 @@ class Maze:
         return value, score
 
     def __score_shortest_loops__(self, value):
-        if value >= 8750:
+        if value >= 7500:
             return 10
-        if value >= 8500:
+        if value >= 7100:
             return 9
-        if value >= 8250:
+        if value >= 6900:
             return 8
-        if value >= 8000:
+        if value >= 6600:
             return 7
-        if value >= 7750:
+        if value >= 6400:
             return 6
-        if value >= 7600:
+        if value >= 6250:
             return 5
-        if value >= 7400:
+        if value >= 6100:
             return 4
-        if value >= 7200:
+        if value >= 6000:
             return 3
-        if value >= 6800:
+        if value >= 5500:
             return 2
-        if value >= 6500:
+        if value >= 5000:
             return 1
         return 0
 

@@ -20,14 +20,14 @@ class Game:
         self.game_object_dict = {}
 
         self.current_maze = None
-        self.num_mazes = 1
+        self.num_mazes = 100
 
         self.num_players = 1
         self.players_list = []
 
     def create_game(self):
         # creates maze from factory, items, starts looping each player
-        print("\ncreating maze and items\n")
+        print(f"\ncreating mazes ({self.num_mazes})\n")
 
         m = maze_factory.create_maze(self.num_mazes, self.rows, self.cols)
         self.current_maze = m
@@ -71,4 +71,7 @@ def main():
     g.create_game()
 
 
-main()
+if __name__ == '__main__':
+    main()
+
+# TODO: videos - 2 - spiral from inside and general take (repeat until good takes, put at start)

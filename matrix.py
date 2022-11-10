@@ -119,10 +119,10 @@ class Matrix:
             else:
                 new_arr[0][c] = 1
 
-        for r in range(self.nrows + 2):
-            for c in range(self.ncols + 2):
-                print(new_arr[r][c], end=" ")
-            print()
+        # for r in range(self.nrows + 2):
+        #     for c in range(self.ncols + 2):
+        #         print(new_arr[r][c], end=" ")
+        #     print()
 
         return new_arr
 
