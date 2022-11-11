@@ -63,6 +63,7 @@ def create_maze(n, rows, cols):
         eta = get_eta(elapsed_sex, progress)
         print(f"maze # {i+1}  ({100.0*i/n}) \t|  {round(100*progress, 2)}% \t|  t= {elapsed_sex//60} m \t|  eta= {eta}")
         print(f"[{'#'*i + '|'*(n-i)}]")
+        print()
 
     print(f"Best Score:\t{best_score}\t{best_values}\n")
 

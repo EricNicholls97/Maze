@@ -1,0 +1,6 @@
+Maze Description
+
+Generate consistently above average mazes by creating hundreds of valid mazes and picking the one with the best combination of the following factors:
+- minimal short loops (many mazes have loops of size 6)
+- maximizing all shortest paths (this difficult algorithmic feat measures the shortest loop starting from each location and sums it together). The greater this value, the less "loopy" the maze feels.
+- gets number of walls in each 3x3 and 5x5 grid and sums it up. It's bad to have a low number of walls in a nxn grid and this metric prevents it
