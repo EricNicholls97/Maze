@@ -1,6 +1,6 @@
 
 
-class Objecto:
+class Chests:
     def __init__(self, loc, type):
         self.row = loc[0]
         self.col = loc[1]

@@ -20,7 +20,7 @@ class Game:
         self.game_object_dict = {}
 
         self.current_maze = None
-        self.num_mazes = 100
+        self.num_mazes = 300
 
         self.num_players = 1
         self.players_list = []
@@ -59,11 +59,11 @@ class Game:
             self.game_object_dict[(r, c)] = spr
             i += 1
 
-    def get_all_drawables(self):
-        a = []
-        for key in self.game_object_dict.keys():
-            objecto = self.game_object_dict[key]
-            a.append (objecto.get_drawable())
+    # def get_all_drawables(self):
+    #     a = []
+    #     for key in self.game_object_dict.keys():
+    #         objecto = self.game_object_dict[key]
+    #         a.append(objecto.get_drawable())
 
 
 def main():

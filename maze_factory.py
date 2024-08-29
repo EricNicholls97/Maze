@@ -37,7 +37,14 @@ def create_maze(n, rows, cols):
     best_m = None
     best_vales = -1
 
+
+    print("Metric 1 = 'get k metric (6)' - all loops of size 6 are counter. More is bad. Relationship arbitrarily chosen. Loop:   | = |")
+    print("Metric 2 = 'Wall sparisty' - number of 3 by 3 regions that have 2 or less walls in it")
+    print("Metric 3 = 'get all shortest loops metric' - count all the shortest loops starting from each square. More is good (maze has lots of bigger loops)")
+
     for i in range(n):
+
+        print("--------------------------- ")
         m = Maze(rows, cols)
 
         m.build_maze(1.0)
@@ -45,6 +52,12 @@ def create_maze(n, rows, cols):
         metric_1 = m.get_k_metric(6)
         metric_2 = m.get_wall_sparsity_metric()
         metric_3 = m.get_all_shortest_loops_metric()
+
+        print("metric 1 - (get 6 loops) = ", metric_1)
+        print("metric 2 - (walls in 3x3 - cum) = ", metric_2)
+        print("metric 3 - (cum_shortest_loops) = ", metric_3)
+        print()
+
 
         metric_values = [metric_1[1], metric_2[1], metric_3[1]]
         weights = [0.18, .12, 0.7]
